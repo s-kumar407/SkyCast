@@ -3,3 +3,5 @@
 export const firstApiURL=process.env.NEXT_PUBLIC_FIRST_API_URL;
 export const currentCityDataApiUrl=process.env.NEXT_PUBLIC_CURRENT_DATA_API_URL;
 export const cityTableDataApiUrl=process.env.NEXT_PUBLIC_CITY_TABLE_DATA_API_URL;
+export const firstApiKey=process.env.NEXT_PUBLIC_FIRST_API_KEY;
+export const currentDataApiKey=process.env.NEXT_PUBLIC_CURRENT_DATA_API_KEY;

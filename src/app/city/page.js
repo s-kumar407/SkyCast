@@ -11,7 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { cityTableDataApiUrl,currentCityDataApiUrl,firstApiURL } from "@/constant/constants";
+import { firstApiKey,currentDataApiKey,currentCityDataApiUrl,firstApiURL } from "@/constant/constants";
 export default function Component() {
   let [cityData, setCityData] = useState({});
   let [cityCoord, setCityCoord] = useState({});
@@ -37,15 +37,14 @@ export default function Component() {
   async function fetchCityData() {
     let coordinates = localStorage.getItem("coordinates");
     coordinates = JSON.parse(coordinates);
-    let apiKey = "adb193c7c2a778b0a260f6e5d7187c68";
     let cityInfo = await fetch(
-      `${firstApiURL}/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${apiKey}`,
+      `${firstApiURL}/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${firstApiKey}`,
       {
         cache: "no-cache",
       }
     );
     let cityCurrentWeather = await fetch(
-      `${currentCityDataApiUrl}/rest/services/timeline/${coordinates.latitude},${coordinates.longitude}?key=AAS9MTZTQCCSKV3BBYGGUWC6B`
+      `${currentCityDataApiUrl}/rest/services/timeline/${coordinates.latitude},${coordinates.longitude}?key=${currentDataApiKey}`
     );
     cityCurrentWeather = await cityCurrentWeather.json();
     console.log(cityCurrentWeather);
@@ -66,7 +65,7 @@ export default function Component() {
   }
 
   function setTemperature() {
-    console.log(cityCurrentWeatherData)
+    console.log(cityForecastData)
     let temp = cityCurrentWeatherData.temp;
     let newNumber = (temp - 32) * (5 / 9);
     let newNum = newNumber.toFixed(2);
@@ -220,6 +219,12 @@ export default function Component() {
                       {cityCurrentWeatherData.windspeed + " mph"}
                     </span>
                   </div>
+                  <div className="flex flex-row items-center">
+                    <ThermometerIcon className="w-6 h-6 mr-2" />
+                    <span className="text-lg font-semibold">
+                    {"Humidity: "+cityCurrentWeatherData.humidity+" g/m³"}
+                    </span>
+                  </div>
                 </CardContent>
               </Card>
               {cityForecastData.map((row) => (
@@ -242,12 +247,13 @@ export default function Component() {
                       ) : (
                         <SunIcon className="w-8 h-8" />
                       )}
+                      {" "+row.conditions}
                     </CardContent>
-                    <CardContent className="flex flex-row items-center justify-between">
-                      <span className="text-xl font-semibold">
-                        {((row.tempmin-32)*5/9).toFixed(2) + "° / " + ((row.tempmax-32)*5/9).toFixed(2) + "° C"}
-                      </span>
-                      <span className="text-sm text-gray-500 dark:text-gray-400"></span>
+                    <CardContent className="flex flex-row items-center gap-4"><ThermometerIcon className="h-8 w-8"/>{"Humidity: "+row.humidity+" g/m³"}</CardContent>
+                    <CardContent className="flex flex-row items-center ">
+                    <ThermometerIcon className="h-8 w-8"/>
+                    {"Temp-min / Temp-max : "}
+                    {((row.tempmin-32)*5/9).toFixed(2) + "° / " + (+(row.tempmax-32)*5/9).toFixed(2) + "° C"}
                     </CardContent>
                   </Card>
                 </div>
