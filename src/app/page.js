@@ -84,7 +84,6 @@ export default function Component() {
   };
 
   const goToCity = (coordinates, countryName) => {
-    console.log(coordinates.lat, coordinates.lon);
     const cord = {
       latitude: coordinates.lat,
       longitude: coordinates.lon,

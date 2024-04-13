@@ -47,10 +47,8 @@ export default function Component() {
       `${currentCityDataApiUrl}/rest/services/timeline/${coordinates.latitude},${coordinates.longitude}?key=${currentDataApiKey}`
     );
     cityCurrentWeather = await cityCurrentWeather.json();
-    console.log(cityCurrentWeather);
     let cityCurrentWeatherCondition = cityCurrentWeather.currentConditions;
     cityInfo = await cityInfo.json();
-    console.log(cityInfo);
     let fiveDayForecast = cityCurrentWeather.days;
     let city = cityInfo.city;
     let currentDayDate = fiveDayForecast[0];
@@ -65,7 +63,6 @@ export default function Component() {
   }
 
   function setTemperature() {
-    console.log(cityForecastData)
     let temp = cityCurrentWeatherData.temp;
     let newNumber = (temp - 32) * (5 / 9);
     let newNum = newNumber.toFixed(2);
