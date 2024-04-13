@@ -253,6 +253,11 @@ export default function Component() {
           </Table>
         </CardContent>
       </Card>
+      <footer className="flex h-16 shrink-0 items-center border-t px-4 md:px-6 bg-slate-900 text-white">
+          <p className="mx-auto text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Weather Inc. All rights reserved.
+          </p>
+        </footer>
     </>
   );
 }

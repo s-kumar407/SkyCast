@@ -84,16 +84,16 @@ export default function Component() {
             <span className="ml-2 font-bold">Weather</span>
           </Link>
           <nav className="ml-auto flex items-center space-x-4">
-            <Link className="font-medium rounded-md hover:underline " href="/">
+            <Link className="font-medium sm:text-xs md: text-sm rounded-md hover:underline " href="/">
               Home
             </Link>
-            <Link className="font-medium rounded-md hover:underline" href="#">
+            <Link className="font-medium sm:text-xs md: text-sm rounded-md hover:underline" href="#">
               Forecast
             </Link>
-            <Link className="font-medium rounded-md hover:underlin" href="#">
+            <Link className="font-medium sm:text-xs md: text-sm rounded-md hover:underlin" href="#">
               About
             </Link>
-            <Link className="font-medium rounded-md hover:underlin" href="#">
+            <Link className="font-medium sm:text-xs md: text-sm rounded-md hover:underlin" href="#">
               Contact
             </Link>
           </nav>
