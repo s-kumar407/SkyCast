@@ -163,7 +163,7 @@ export default function Component() {
           <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
             <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
               <Label className="shrink-0" htmlFor="search">
-                Search City
+                Search City:
               </Label>
               <Autocomplete
                 cities={citiesData}
@@ -238,7 +238,7 @@ export default function Component() {
                   <TableCell>{row.country_code}</TableCell>
                   <TableCell>{row.timezone}</TableCell>
                   <TableCell>
-                    {row.coordinates.lon+" lon "}, {" "+row.coordinates.lat+" lat"}
+                  {" "+row.coordinates.lat+" lat"},   {row.coordinates.lon+" lon "}
                   </TableCell>
                 </TableRow>
               ))}

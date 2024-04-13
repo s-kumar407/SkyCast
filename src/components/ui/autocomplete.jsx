@@ -7,7 +7,7 @@ const SuggestionList = styled("div", {
   position: "absolute",
   top: "100%",
   left: 0,
-  right: 0,
+  right:0,
   backgroundColor: "white",
   boxShadow:
     "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
@@ -53,11 +53,18 @@ const Autocomplete = ({ searchCity, cities, onSuggestionSelected }) => {
     setValue(suggestion.name);
     onSuggestionSelected(suggestion);
   };
-
   const renderSuggestion = (suggestion) => (
-    <SuggestionItem suggestion={suggestion} />
+    <SuggestionList>
+        {suggestions.map((suggestion, index) => (
+            <SuggestionItem key={index} onClick={() => handleSuggestionClick(suggestion)}>{suggestion.name }</SuggestionItem>
+          ))}
+    </SuggestionList>
   );
-
+  const handleSuggestionClick = (suggestion) => {
+    setValue(suggestion.name);
+    onSuggestionSelected(suggestion);
+    setSuggestions([]);
+  };
   const onKeyDown = async(event) => {
     if (event.key === "Enter") {
       await searchCity(value);
@@ -72,8 +79,8 @@ const Autocomplete = ({ searchCity, cities, onSuggestionSelected }) => {
 
   return (
     <div className="relative">
-      <div className="flex justify-center items-center ">
-      <div className="flex-grow mr-2">
+      <div className="flex justify-center items-center">
+      <div className="flex-grow mr-2 border-2 border-black border-double rounded">
         <Autosuggest
         suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -96,13 +103,6 @@ const Autocomplete = ({ searchCity, cities, onSuggestionSelected }) => {
         Search
       </Button>
       </div>
-      {suggestions.length > 0 && (
-        <SuggestionList>
-          {suggestions.map((suggestion, index) => (
-            <SuggestionItem key={index}>{suggestion.name}</SuggestionItem>
-          ))}
-        </SuggestionList>
-      )}
     </div>
   );
 };
