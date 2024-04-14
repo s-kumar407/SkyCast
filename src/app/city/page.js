@@ -254,15 +254,16 @@ export default function Component() {
                       )}
                       {" "+row.conditions}
                     </CardContent>
-                    <CardContent className="flex flex-row items-center gap-4"><ThermometerIcon className="h-8 w-8"/>{"Humidity: "+row.humidity+" g/m³"}</CardContent>
                     <CardContent className="flex flex-row items-center">
                     <ThermometerIcon className="h-8 w-8"/>
-                   <span className="text-sm font-medium">Temp-min / Temp-max : </span> 
+                   <span className="text-sm font-medium">Temp-min / Temp-max{" "} : {" "} </span> 
                     <span className="text-xs ">
                     {((row.tempmin-32)*5/9).toFixed(2) + "° / " + (+(row.tempmax-32)*5/9).toFixed(2) + "° C"}
                     </span>
                    
                     </CardContent>
+                    <CardContent className="flex flex-row items-center gap-1"><ThermometerIcon className="h-8 w-8"/>{"Humidity: "+row.humidity+" g/m³"}</CardContent>
+                   
                   </Card>
                 </div>
               ))}

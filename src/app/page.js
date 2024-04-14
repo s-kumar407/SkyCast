@@ -28,7 +28,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Autocomplete from "@/components/ui/autocomplete";
 import { cityTableDataApiUrl} from "@/constant/constants";
-import { Main } from "next/document";
 export default function Component() {
   const [citiesData, setCitiesData] = useState([]);
   const [citiesWholeData, setCitiesWholeData] = useState([]);
