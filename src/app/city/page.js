@@ -72,7 +72,6 @@ export default function Component() {
     const startIndex = 1;
     const endIndex = 5;
     const slicedArray = cityForecastData.slice(startIndex, endIndex);
-    console.log(slicedArray);
     setTempInCel(newNum);
     setCityForecastData(slicedArray);
 
