@@ -44,11 +44,14 @@ export default function Component() {
       }
     );
     let cityCurrentWeather = await fetch(
-      `${currentCityDataApiUrl}/rest/services/timeline/${coordinates.latitude},${coordinates.longitude}?key=${currentDataApiKey}`
+      `${currentCityDataApiUrl}/rest/services/timeline/${coordinates.latitude},${coordinates.longitude}?key=${currentDataApiKey}`,{
+        cache:"no-cache"
+      }
     );
     cityCurrentWeather = await cityCurrentWeather.json();
     let cityCurrentWeatherCondition = cityCurrentWeather.currentConditions;
     cityInfo = await cityInfo.json();
+   
     let fiveDayForecast = cityCurrentWeather.days;
     let city = cityInfo.city;
     let currentDayDate = fiveDayForecast[0];
@@ -69,6 +72,7 @@ export default function Component() {
     const startIndex = 1;
     const endIndex = 5;
     const slicedArray = cityForecastData.slice(startIndex, endIndex);
+    console.log(slicedArray);
     setTempInCel(newNum);
     setCityForecastData(slicedArray);
 
@@ -192,6 +196,8 @@ export default function Component() {
                       ) : cityCurrentWeatherData.icon === "rain" ? (
                         <CloudRainIcon className="w-8 h-8" />
                       ) : (
+                        cityCurrentWeatherData.icon==="snow"?
+                        <CloudSnowIcon className="h-8 w-8"/>:
                         <SunIcon className="w-8 h-8" />
                       )}
                     <span className="text-lg font-semibold">
@@ -242,15 +248,20 @@ export default function Component() {
                       ) : row.icon === "rain" ? (
                         <CloudRainIcon className="w-8 h-8" />
                       ) : (
+                        row.icon==="snow"?
+                        <CloudSnowIcon className="h-8 w-8"/>:
                         <SunIcon className="w-8 h-8" />
                       )}
                       {" "+row.conditions}
                     </CardContent>
                     <CardContent className="flex flex-row items-center gap-4"><ThermometerIcon className="h-8 w-8"/>{"Humidity: "+row.humidity+" g/m³"}</CardContent>
-                    <CardContent className="flex flex-row items-center ">
+                    <CardContent className="flex flex-row items-center">
                     <ThermometerIcon className="h-8 w-8"/>
-                    {"Temp-min / Temp-max : "}
+                   <span className="text-sm font-medium">Temp-min / Temp-max : </span> 
+                    <span className="text-xs ">
                     {((row.tempmin-32)*5/9).toFixed(2) + "° / " + (+(row.tempmax-32)*5/9).toFixed(2) + "° C"}
+                    </span>
+                   
                     </CardContent>
                   </Card>
                 </div>

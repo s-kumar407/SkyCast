@@ -1,13 +1,15 @@
+"use client";
 import React, { useState } from "react";
 import Autosuggest from "react-autosuggest";
-import { Card, CardContent } from "./card";
+import { Card } from "./card";
 import { styled } from "@stitches/react";
 import { Button } from "./button";
+import { useEffect } from "react";
 const SuggestionList = styled("div", {
   position: "absolute",
   top: "100%",
   left: 0,
-  right:0,
+  right: 0,
   backgroundColor: "white",
   boxShadow:
     "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
@@ -22,9 +24,14 @@ const SuggestionItem = styled(Card, {
     backgroundColor: "#f5f5f5",
   },
 });
-const Autocomplete = ({ searchCity, cities, onSuggestionSelected }) => {
-  const [value, setValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+const Autocomplete = ({ searchCity, cities }) => {
+  let [inputBoxValue, setInputBoxValue] = useState("");
+  let [realInputBoxValue, setRealInputBoxValue] = useState("");
+  let [suggestions, setSuggestions] = useState([]);
+  let [isSelected, setIsSelected] = useState(false);
+  useEffect(() => {
+    changeInputBoxValue();
+  }, [isSelected]);
 
   const getSuggestions = async (value) => {
     const inputValue = value.trim().toLowerCase();
@@ -49,59 +56,65 @@ const Autocomplete = ({ searchCity, cities, onSuggestionSelected }) => {
     setSuggestions([]);
   };
 
-  const onSuggestionSelectedHandler = (event, { suggestion }) => {
-    setValue(suggestion.name);
-    onSuggestionSelected(suggestion);
-  };
-  const renderSuggestion = (suggestion) => (
-    <SuggestionList>
-        {suggestions.map((suggestion, index) => (
-            <SuggestionItem key={index} onClick={() => handleSuggestionClick(suggestion)}>{suggestion.name }</SuggestionItem>
-          ))}
-    </SuggestionList>
-  );
-  const handleSuggestionClick = (suggestion) => {
-    setValue(suggestion.name);
-    onSuggestionSelected(suggestion);
+  function changeInputBoxValue() {
+    setInputBoxValue(realInputBoxValue);
+  }
+
+  const handleSuggestionClick = (row) => {
+    setIsSelected(!isSelected);
+    setRealInputBoxValue(row.name);
     setSuggestions([]);
   };
-  const onKeyDown = async(event) => {
+
+  const renderSuggestion = () => (
+    <SuggestionList>
+      {suggestions.map((row, index) => (
+        <SuggestionItem key={index} onClick={() => handleSuggestionClick(row)}>
+          {row.name}
+        </SuggestionItem>
+      ))}
+    </SuggestionList>
+  );
+
+  const onKeyDown = async (event) => {
     if (event.key === "Enter") {
-      await searchCity(value);
-      setValue("");
+      await searchCity(inputBoxValue);
+      setInputBoxValue("");
     }
   };
 
   async function findCity() {
-    await searchCity(value);
-    setValue("");
+    await searchCity(inputBoxValue);
+    setInputBoxValue("");
   }
 
   return (
     <div className="relative">
-      <div className="flex justify-center items-center">
-      <div className="flex-grow mr-2 border-2 border-black border-double rounded">
-        <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        onSuggestionSelected={onSuggestionSelectedHandler}
-        getSuggestionValue={(suggestion) => suggestion.name}
-        renderSuggestion={renderSuggestion}
-        inputProps={{
-          placeholder: "Type something...",
-          value,
-          onChange: (event, { newValue }) => setValue(newValue),
-          onKeyDown,
-        }}
-        
-      />
-
+      <div className="flex flex-col md:flex-row justify-center items-center ">
+        <div className="flex-grow mr-2 border-2 border-black border-double rounded">
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={onSuggestionsClearRequested}
+            getSuggestionValue={(suggestion) => suggestion.name}
+            renderSuggestion={renderSuggestion}
+            inputProps={{
+              placeholder: `Type something...`,
+              value: inputBoxValue,
+              onChange: (event, { newValue }) => setInputBoxValue(newValue),
+              onKeyDown,
+            }}
+          />
         </div>
-    
-      <Button variant="outline" onClick={findCity} className="bg-black text-white m-2">
-        Search
-      </Button>
+
+        <Button
+          variant="outline"
+          onClick={findCity}
+          className="bg-black text-white m-2 md:ml-auto"
+          style={{ marginTop: '1rem' }}
+        >
+          Search
+        </Button>
       </div>
     </div>
   );

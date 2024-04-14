@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Autocomplete from "@/components/ui/autocomplete";
 import { cityTableDataApiUrl} from "@/constant/constants";
+import { Main } from "next/document";
 export default function Component() {
   const [citiesData, setCitiesData] = useState([]);
   const [citiesWholeData, setCitiesWholeData] = useState([]);
@@ -92,10 +93,6 @@ export default function Component() {
     localStorage.setItem("coordinates", JSON.stringify(cord));
   };
 
-  const handleSuggestionSelected = (suggestion) => {
-    console.log("Selected suggestion:", suggestion);
-  };
-
   async function searchCity(cityName) {
     let city = await fetch(
       `${cityTableDataApiUrl}/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records?select=*&where=name%20like%20%22${cityName}%22%20`,
@@ -155,6 +152,8 @@ export default function Component() {
           </Link>
         </nav>
       </header>
+      <div className="content-wrapper overflow-y-auto">
+      <main className="flex flex-col h-screen">
       <Card className="m-5 ">
         <CardHeader className="pb-0">
           <CardTitle className="text-2xl md:text-xl">Search</CardTitle>
@@ -167,7 +166,6 @@ export default function Component() {
               </Label>
               <Autocomplete
                 cities={citiesData}
-                onSuggestionSelected={handleSuggestionSelected}
                 searchCity={searchCity}
               />
               </div>
@@ -253,6 +251,8 @@ export default function Component() {
           </Table>
         </CardContent>
       </Card>
+      </main>
+      </div>
       <footer className="flex h-16 shrink-0 items-center border-t px-4 md:px-6 bg-slate-900 text-white">
           <p className="mx-auto text-sm text-gray-500 dark:text-gray-400">
             © 2023 Weather Inc. All rights reserved.
