@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   CardTitle,
   CardDescription,
@@ -33,34 +33,34 @@ export default function Component() {
   const [citiesWholeData, setCitiesWholeData] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const observerRef = useRef(null);
   let [dropDownValue, setDropDownValue] = useState("");
   let [isDropDownValueSelected, setIsDropDownValueSelected] = useState(false);
+  
   useEffect(() => {
-    fetchCitiesData();
-    // Set up the intersection observer
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !loading) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      },
-      { rootMargin: "0px", threshold: 1.0 }
-    );
-    observerRef.current = observer;
-    return () => {
-      observer.disconnect();
-    };
+  fetchData();
+   
   }, [page]);
 
   useEffect(() => {
-    // Attach the observer to the last table row
-    if (citiesData.length > 0 && page > 1) {
-      observerRef.current.observe(
-        document.querySelector(`#table-row-${citiesData.length - 1}`)
-      );
-    }
-  }, [citiesData, page]);
+
+    const handleScroll = () => {
+      console.log("scroll");
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+      let clientHeight = document.documentElement.clientHeight || window.innerHeight;
+  
+      console.log(scrollTop, clientHeight, scrollHeight);
+      if (scrollTop + clientHeight >= scrollHeight) {
+        setPage((pre) => pre + 1);
+      }
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+  
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []); 
 
   useEffect(() => {
     sortedArray(dropDownValue);
@@ -82,6 +82,11 @@ export default function Component() {
     setCitiesWholeData((prevData) => [...prevData, ...data.results]);
     setLoading(false);
   };
+
+  async function fetchData()
+  {
+    await fetchCitiesData();
+  }
 
   const goToCity = (coordinates, countryName) => {
     const cord = {
@@ -107,9 +112,10 @@ export default function Component() {
       setCitiesData(citiesWholeData);
     } else {
       setCitiesData(city);
-      setPage(1);
+    
     }
   }
+
   function selectDropDownValue(value) {
     setDropDownValue(value);
     setIsDropDownValueSelected(true);
@@ -305,3 +311,5 @@ function ChevronDownIcon(props) {
     </svg>
   );
 }
+
+
